@@ -15,15 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/accounts/*")
 public class AccountController {
 
-    @Value("${google.base_url}")
-    private String GOOGLE_TOKEN_BASE_URL;
-
-    @Value("${google.clientId}")
-    private String clientId;
-
-    @Value("${google.secretKey}")
-    private String secretKey;
-
     @Autowired
     private AccountService accountService;
 
