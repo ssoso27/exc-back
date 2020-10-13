@@ -2,6 +2,7 @@ package com.swordmaster.excalibur.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.swordmaster.excalibur.dto.AccountDTO;
+import com.swordmaster.excalibur.entity.Account;
 import com.swordmaster.excalibur.helper.GoogleAPIHelper;
 import com.swordmaster.excalibur.repository.AccountRepository;
 import com.swordmaster.excalibur.vo.GoogleUserInfo;
@@ -27,17 +28,27 @@ public class AccountService {
         GoogleUserInfo googleUserInfo = googleAPIHelper.decodeJWT(jwtToken);
 
         String email = googleUserInfo.getEmail();
-//        Optional<AccountDTO> maybeAccount = accountRepository.findByEmail(email);
-//
-//        if (maybeAccount.isEmpty()) {
-//            // 회원가입
-//            AccountDTO accountDTO = accountRepository.signUp(googleUserInfo.getEmail(), googleUserInfo.getName(), googleUserInfo.getPicture(), googleUserInfo.getToken());
-//            responseEntity = new ResponseEntity<>(accountDTO, HttpStatus.OK);
-//        } else {
-//            // 로그인
+        Optional<Account> maybeAccount = accountRepository.findByEmail(email);
+        System.out.println(maybeAccount);
+
+        if (maybeAccount.isEmpty()) {
+            // 회원가입
+            Account account = Account.builder()
+                    .email(googleUserInfo.getEmail())
+                    .name(googleUserInfo.getName())
+                    .picture(googleUserInfo.getPicture())
+                    .accessToken(googleUserInfo.getToken())
+                    .role("student")
+                    .build();
+            System.out.println(account);
+            AccountDTO accountDTO = accountRepository.save(account).toDTO();
+            System.out.println(accountDTO);
+            responseEntity = new ResponseEntity<>(accountDTO, HttpStatus.OK);
+        } else {
+            // 로그인
 //            AccountDTO accountDTO = accountRepository.signIn(googleUserInfo.getEmail(), googleUserInfo.getToken());
 //            responseEntity = new ResponseEntity<>(accountDTO, HttpStatus.OK);
-//        }
+        }
 
         AccountDTO accountDTO = AccountDTO.builder()
                 .name(googleUserInfo.getName())
