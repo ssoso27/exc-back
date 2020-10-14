@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.swordmaster.excalibur.enumclass.UserRole;
 import com.swordmaster.excalibur.vo.GoogleOAuthRequest;
 import com.swordmaster.excalibur.vo.GoogleOAuthResponse;
 import com.swordmaster.excalibur.vo.GoogleUserInfo;
@@ -25,7 +26,7 @@ public class GoogleAPIHelper {
     @Value("${google.secretKey}")
     private String secretKey;
 
-    public String getJWTToken(String authCode) throws JsonProcessingException {
+    public String getJWTToken(String authCode, UserRole userRole) throws JsonProcessingException {
         // HTTP Request를 위한 RESTTemplate
         RestTemplate restTemplate = new RestTemplate();
 
@@ -35,7 +36,7 @@ public class GoogleAPIHelper {
                 .clientId(clientId)
                 .clientSecret(secretKey)
                 .code(authCode)
-                .redirectUri("http://localhost:8080/accounts/signin/google")
+                .redirectUri("http://localhost:8080/accounts/signin/google" + "?role=" + userRole.getName())
                 .grantType("authorization_code").build();
 
 

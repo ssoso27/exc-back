@@ -1,13 +1,17 @@
 package com.swordmaster.excalibur.dto;
 
-import lombok.Builder;
-import lombok.Data;
+import com.swordmaster.excalibur.enumclass.UserRole;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
+@AllArgsConstructor
 @Builder
 public class AccountDTO {
     private String email;
     private String name;
-    private String role; // TODO: enum화
+    private String role;
     private String accessToken;
 }

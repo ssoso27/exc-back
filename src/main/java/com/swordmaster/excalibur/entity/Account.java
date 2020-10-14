@@ -1,6 +1,7 @@
 package com.swordmaster.excalibur.entity;
 
 import com.swordmaster.excalibur.dto.AccountDTO;
+import com.swordmaster.excalibur.enumclass.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -31,8 +32,9 @@ public class Account {
     @Column
     private String picture;
 
+    @Enumerated(EnumType.STRING)
     @Column
-    private String role; // TODO: 이후 Enum으로 빼자
+    private UserRole role;
 
     @Column(name = "accessToken")
     private String accessToken;
@@ -49,7 +51,7 @@ public class Account {
         return AccountDTO.builder()
                 .email(this.email)
                 .name(this.name)
-                .role(this.role)
+                .role(this.role.getName())
                 .accessToken(this.accessToken)
                 .build();
     }

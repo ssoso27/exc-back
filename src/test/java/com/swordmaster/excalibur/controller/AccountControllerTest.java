@@ -1,9 +1,8 @@
 package com.swordmaster.excalibur.controller;
 
 import com.swordmaster.excalibur.dto.AccountDTO;
-import com.swordmaster.excalibur.helper.GoogleAPIHelper;
+import com.swordmaster.excalibur.enumclass.UserRole;
 import com.swordmaster.excalibur.service.AccountService;
-import com.swordmaster.excalibur.vo.GoogleOAuthResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -37,14 +35,14 @@ public class AccountControllerTest {
         AccountDTO accountDTO = AccountDTO.builder()
                 .email("mockemail@mock.com")
                 .name("mockname")
-                .role("student")
+                .role(UserRole.STUDENT.getName())
                 .accessToken("mocktoken")
                 .build();
         final String authCode = "myauthcode";
 
         ResponseEntity<AccountDTO> responseEntity = new ResponseEntity<>(accountDTO, HttpStatus.OK);
 
-        given(accountService.googleSignin(authCode)).willReturn(responseEntity);
+        given(accountService.googleSignin(authCode, UserRole.STUDENT)).willReturn(responseEntity);
 
         // when
         ResultActions result = mvc

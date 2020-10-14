@@ -3,6 +3,7 @@ package com.swordmaster.excalibur.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.swordmaster.excalibur.dto.AccountDTO;
 import com.swordmaster.excalibur.entity.Account;
+import com.swordmaster.excalibur.enumclass.UserRole;
 import com.swordmaster.excalibur.helper.GoogleAPIHelper;
 import com.swordmaster.excalibur.repository.AccountRepository;
 import com.swordmaster.excalibur.vo.GoogleUserInfo;
@@ -21,10 +22,10 @@ public class AccountService {
     @Autowired
     AccountRepository accountRepository;
 
-    public ResponseEntity<AccountDTO> googleSignin(String authCode) throws JsonProcessingException {
+    public ResponseEntity<AccountDTO> googleSignin(String authCode, UserRole userRole) throws JsonProcessingException {
         ResponseEntity<AccountDTO> responseEntity;
 
-        String jwtToken = googleAPIHelper.getJWTToken(authCode);
+        String jwtToken = googleAPIHelper.getJWTToken(authCode, userRole);
         GoogleUserInfo googleUserInfo = googleAPIHelper.decodeJWT(jwtToken);
 
         String email = googleUserInfo.getEmail();
@@ -38,7 +39,7 @@ public class AccountService {
                     .name(googleUserInfo.getName())
                     .picture(googleUserInfo.getPicture())
                     .accessToken(googleUserInfo.getToken())
-                    .role("student")
+                    .role(userRole)
                     .build();
             System.out.println(account);
             AccountDTO accountDTO = accountRepository.save(account).toDTO();
@@ -54,7 +55,7 @@ public class AccountService {
                 .name(googleUserInfo.getName())
                 .email(googleUserInfo.getEmail())
                 .accessToken(googleUserInfo.getToken())
-                .role("asdf")
+                .role(userRole.getName())
                 .build();
         responseEntity = new ResponseEntity<>(accountDTO, HttpStatus.OK);
 
