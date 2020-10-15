@@ -20,8 +20,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Account {
     @Id
-    @GeneratedValue
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
     @Column
     private String email;
