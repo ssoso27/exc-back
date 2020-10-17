@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Account {
+public class Account extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -40,14 +40,6 @@ public class Account {
 
     @Column(name = "refreshToken")
     private String refreshToken;
-
-    @CreatedDate
-    @Column
-    private LocalDateTime createdAt;
-
-    @LastModifiedDate
-    @Column
-    private LocalDateTime updatedAt;
 
     public AccountDTO toDTO() {
         return AccountDTO.builder()
