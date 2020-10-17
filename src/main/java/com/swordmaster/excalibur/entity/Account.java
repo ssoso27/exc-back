@@ -38,6 +38,9 @@ public class Account {
     @Column(name = "accessToken")
     private String accessToken;
 
+    @Column(name = "refreshToken")
+    private String refreshToken;
+
     @CreatedDate
     @Column
     private LocalDateTime createdAt;
@@ -52,6 +55,7 @@ public class Account {
                 .name(this.name)
                 .role(this.role.getName())
                 .accessToken(this.accessToken)
+                .refreshToken(this.refreshToken)
                 .build();
     }
 }
