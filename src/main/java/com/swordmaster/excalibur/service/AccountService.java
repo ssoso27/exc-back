@@ -29,14 +29,13 @@ public class AccountService {
 
     public ResponseEntity<AccountDTO> googleSignin(String authCode, UserRole userRole) throws JsonProcessingException {
         ResponseEntity<AccountDTO> responseEntity;
+        AccountDTO accountDTO = null;
 
         String jwtToken = googleAPIHelper.getJWTToken(authCode, userRole);
         GoogleUserInfo googleUserInfo = googleAPIHelper.decodeJWT(jwtToken);
-        System.out.println(googleUserInfo);
 
         String email = googleUserInfo.getEmail();
         Optional<Account> maybeAccount = accountRepository.findByEmail(email);
-        System.out.println(maybeAccount);
 
         if (maybeAccount.isEmpty()) {
             // 회원가입
@@ -46,13 +45,13 @@ public class AccountService {
                     .picture(googleUserInfo.getPicture())
                     .role(userRole)
                     .build();
-            AccountDTO accountDTO = account.toDTO(); // TODO: refactoring
+
+            accountDTO = account.toDTO(); // TODO: refactoring
             Jwt jwt = jwtTokenProvider.generateToken(accountDTO);
             account.setAccessToken(jwt.getAccessToken());
             account.setRefreshToken(jwt.getRefreshToken());
-            System.out.println(account);
             accountDTO = accountRepository.save(account).toDTO();
-            System.out.println(accountDTO);
+
             responseEntity = new ResponseEntity<>(accountDTO, HttpStatus.OK);
         } else {
             // 로그인
@@ -60,12 +59,6 @@ public class AccountService {
 //            responseEntity = new ResponseEntity<>(accountDTO, HttpStatus.OK);
         }
 
-        AccountDTO accountDTO = AccountDTO.builder()
-                .name(googleUserInfo.getName())
-                .email(googleUserInfo.getEmail())
-                .accessToken(googleUserInfo.getToken())
-                .role(userRole.getName())
-                .build();
         responseEntity = new ResponseEntity<>(accountDTO, HttpStatus.OK);
 
         return responseEntity;

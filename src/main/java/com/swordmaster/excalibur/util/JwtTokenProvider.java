@@ -3,9 +3,9 @@ package com.swordmaster.excalibur.util;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.swordmaster.excalibur.dto.AccountDTO;
 import com.swordmaster.excalibur.vo.Jwt;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Encoders;
+import io.jsonwebtoken.security.SignatureException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -91,5 +91,36 @@ public class JwtTokenProvider {
         String refreshToken = this.createToken(claims, accountDTO.getEmail(), TOKEN_TYPE.REFRESH_TOKEN);
 
         return new Jwt(accessToken, refreshToken);
+    }
+
+    // 토큰 파싱
+    private Claims parseToken(String token, TokenTypeData ttd) {
+        Claims claims = null;
+
+        try {
+            claims = Jwts.parserBuilder()
+                    .setSigningKey(ttd.getKey())
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (MissingClaimException e) {
+            System.out.println("The parsed JWT did ot have the sub field");
+        } catch (JwtException e) {
+            System.out.println("Don't trust the JWT");
+        }
+
+        return claims;
+    }
+
+    // 토큰 만료 확인
+    private Boolean isExpired(Date expiration) {
+        return expiration.before(new Date());
+    }
+
+    // 토큰 검증
+    public Boolean validate(String token, String email, TOKEN_TYPE token_type) {
+        Claims claims = this.parseToken(token, this.makeTokenTypeData(token_type));
+        System.out.println(claims);
+        return email.equals(claims.getSubject()) && !isExpired(claims.getExpiration());
     }
 }
