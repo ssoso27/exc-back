@@ -6,7 +6,9 @@ import com.swordmaster.excalibur.entity.Account;
 import com.swordmaster.excalibur.enumclass.UserRole;
 import com.swordmaster.excalibur.helper.GoogleAPIHelper;
 import com.swordmaster.excalibur.repository.AccountRepository;
+import com.swordmaster.excalibur.util.JwtTokenProvider;
 import com.swordmaster.excalibur.vo.GoogleUserInfo;
+import com.swordmaster.excalibur.vo.Jwt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,9 @@ public class AccountService {
     GoogleAPIHelper googleAPIHelper;
 
     @Autowired
+    JwtTokenProvider jwtTokenProvider;
+
+    @Autowired
     AccountRepository accountRepository;
 
     public ResponseEntity<AccountDTO> googleSignin(String authCode, UserRole userRole) throws JsonProcessingException {
@@ -27,6 +32,7 @@ public class AccountService {
 
         String jwtToken = googleAPIHelper.getJWTToken(authCode, userRole);
         GoogleUserInfo googleUserInfo = googleAPIHelper.decodeJWT(jwtToken);
+        System.out.println(googleUserInfo);
 
         String email = googleUserInfo.getEmail();
         Optional<Account> maybeAccount = accountRepository.findByEmail(email);
@@ -38,11 +44,14 @@ public class AccountService {
                     .email(googleUserInfo.getEmail())
                     .name(googleUserInfo.getName())
                     .picture(googleUserInfo.getPicture())
-                    .accessToken(googleUserInfo.getToken())
                     .role(userRole)
                     .build();
+            AccountDTO accountDTO = account.toDTO(); // TODO: refactoring
+            Jwt jwt = jwtTokenProvider.generateToken(accountDTO);
+            account.setAccessToken(jwt.getAccessToken());
+            account.setRefreshToken(jwt.getRefreshToken());
             System.out.println(account);
-            AccountDTO accountDTO = accountRepository.save(account).toDTO();
+            accountDTO = accountRepository.save(account).toDTO();
             System.out.println(accountDTO);
             responseEntity = new ResponseEntity<>(accountDTO, HttpStatus.OK);
         } else {
