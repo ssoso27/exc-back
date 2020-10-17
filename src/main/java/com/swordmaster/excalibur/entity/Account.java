@@ -32,7 +32,6 @@ public class Account {
     @Column
     private String picture;
 
-    @Enumerated(EnumType.STRING)
     @Column
     private UserRole role;
 
