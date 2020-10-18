@@ -10,11 +10,9 @@ import com.swordmaster.excalibur.util.JwtTokenProvider;
 import com.swordmaster.excalibur.vo.GoogleUserInfo;
 import com.swordmaster.excalibur.vo.Jwt;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.http.HttpStatus;
-
-import java.util.Optional;
 
 @Service
 public class AccountService {
@@ -29,35 +27,27 @@ public class AccountService {
 
     public ResponseEntity<AccountDTO> googleSignin(String authCode, UserRole userRole) throws JsonProcessingException {
         ResponseEntity<AccountDTO> responseEntity;
-        AccountDTO accountDTO = null;
 
         String jwtToken = googleAPIHelper.getJWTToken(authCode, userRole);
         GoogleUserInfo googleUserInfo = googleAPIHelper.decodeJWT(jwtToken);
 
         String email = googleUserInfo.getEmail();
-        Optional<Account> maybeAccount = accountRepository.findByEmail(email);
 
-        if (maybeAccount.isEmpty()) {
-            // 회원가입
-            Account account = Account.builder()
+        Account account = accountRepository.findByEmail(email).orElseGet(() ->
+                    Account.builder()
                     .email(googleUserInfo.getEmail())
                     .name(googleUserInfo.getName())
                     .picture(googleUserInfo.getPicture())
                     .role(userRole)
-                    .build();
+                    .build()
+        );
 
-            accountDTO = account.toDTO(); // TODO: refactoring
-            Jwt jwt = jwtTokenProvider.generateToken(accountDTO);
-            account.setAccessToken(jwt.getAccessToken());
-            account.setRefreshToken(jwt.getRefreshToken());
-            accountDTO = accountRepository.save(account).toDTO();
+        Jwt jwt = jwtTokenProvider.generateToken(email);
 
-            responseEntity = new ResponseEntity<>(accountDTO, HttpStatus.OK);
-        } else {
-            // 로그인
-//            AccountDTO accountDTO = accountRepository.signIn(googleUserInfo.getEmail(), googleUserInfo.getToken());
-//            responseEntity = new ResponseEntity<>(accountDTO, HttpStatus.OK);
-        }
+        account.setAccessToken(jwt.getAccessToken());
+        account.setRefreshToken(jwt.getRefreshToken());
+
+        AccountDTO accountDTO = accountRepository.save(account).toDTO();
 
         responseEntity = new ResponseEntity<>(accountDTO, HttpStatus.OK);
 

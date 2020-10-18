@@ -21,8 +21,7 @@ public class AccountController {
     @GetMapping("/signin/google")
     public ResponseEntity<AccountDTO> googleSignin (@RequestParam(value="code") String authCode, @RequestParam(value="role") String role) throws JsonProcessingException {
         UserRole userRole = UserRole.valueOf(role.toUpperCase());
-        ResponseEntity<AccountDTO> result = accountService.googleSignin(authCode, userRole);
 
-        return result;
+        return accountService.googleSignin(authCode, userRole);
     }
 }

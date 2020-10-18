@@ -50,7 +50,6 @@ public class GoogleAPIHelper {
         ResponseEntity<String> resultEntity = restTemplate.postForEntity(GOOGLE_TOKEN_BASE_URL, googleOAuthRequestParam, String.class);
 
         //Token Request
-        System.out.println(resultEntity);
         GoogleOAuthResponse result = mapper.readValue(resultEntity.getBody(), new TypeReference<GoogleOAuthResponse>() {
         });
 
@@ -70,8 +69,6 @@ public class GoogleAPIHelper {
         mapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 
-        GoogleUserInfo userInfo = mapper.readValue(resultJson, new TypeReference<GoogleUserInfo>(){});
-
-        return userInfo;
+        return mapper.readValue(resultJson, new TypeReference<GoogleUserInfo>(){});
     }
 }

@@ -1,18 +1,14 @@
 package com.swordmaster.excalibur.util;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.swordmaster.excalibur.dto.AccountDTO;
 import com.swordmaster.excalibur.vo.Jwt;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Encoders;
-import io.jsonwebtoken.security.SignatureException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
-import java.util.Map;
 
 @Component
 public class JwtTokenProvider {
@@ -67,13 +63,12 @@ public class JwtTokenProvider {
     }
 
     // 토큰 생성
-    private String createToken(Map<String, Object> claims, String subject, TOKEN_TYPE tokenType) {
+    private String createToken(String subject, TOKEN_TYPE tokenType) {
         TokenTypeData ttd = this.makeTokenTypeData(tokenType);
 
         LocalDateTime d = LocalDateTime.now().plusMinutes(ttd.getTime());
 
         return Jwts.builder()
-                .setClaims(claims)
                 .setSubject(subject)
                 .setExpiration(Date.from(d.atZone(ZoneId.systemDefault()).toInstant()))
                 .setIssuedAt(Date.from( LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()))
@@ -82,13 +77,10 @@ public class JwtTokenProvider {
     }
 
     // 토큰 생성
-    public Jwt generateToken(AccountDTO accountDTO) {
+    public Jwt generateToken(String email) {
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        Map claims = objectMapper.convertValue(accountDTO, Map.class);
-
-        String accessToken = this.createToken(claims, accountDTO.getEmail(), TOKEN_TYPE.ACCESS_TOKEN);
-        String refreshToken = this.createToken(claims, accountDTO.getEmail(), TOKEN_TYPE.REFRESH_TOKEN);
+        String accessToken = this.createToken(email, TOKEN_TYPE.ACCESS_TOKEN);
+        String refreshToken = this.createToken(email, TOKEN_TYPE.REFRESH_TOKEN);
 
         return new Jwt(accessToken, refreshToken);
     }
