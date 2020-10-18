@@ -5,8 +5,6 @@ import com.swordmaster.excalibur.enumclass.AccountType;
 import com.swordmaster.excalibur.enumclass.UserRole;
 import lombok.Getter;
 import lombok.ToString;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Getter
 @ToString

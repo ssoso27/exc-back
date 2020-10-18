@@ -2,7 +2,9 @@ package com.swordmaster.excalibur.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.swordmaster.excalibur.dto.AccountDTO;
+import com.swordmaster.excalibur.dto.ResponseMessage;
 import com.swordmaster.excalibur.dto.SignUpAccountDTO;
+import com.swordmaster.excalibur.enumclass.Message;
 import com.swordmaster.excalibur.enumclass.UserRole;
 import com.swordmaster.excalibur.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +26,7 @@ public class AccountController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<String> signUp(@RequestBody SignUpAccountDTO signUpAccountDTO) {
+    public ResponseEntity<ResponseMessage> signUp(@RequestBody SignUpAccountDTO signUpAccountDTO) {
         return accountService.signUp(signUpAccountDTO);
     }
 }
