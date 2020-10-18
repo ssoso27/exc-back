@@ -72,7 +72,7 @@ public class JwtTokenProvider {
                 .setSubject(subject)
                 .setExpiration(Date.from(d.atZone(ZoneId.systemDefault()).toInstant()))
                 .setIssuedAt(Date.from( LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()))
-                .signWith(SignatureAlgorithm.HS256, ttd.getKey())
+                .signWith(SignatureAlgorithm.HS256, ttd.getKey()) // TODO: deprecated 된 method 임
                 .compact();
     }
 
