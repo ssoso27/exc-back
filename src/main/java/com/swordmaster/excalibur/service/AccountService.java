@@ -3,6 +3,7 @@ package com.swordmaster.excalibur.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.swordmaster.excalibur.dto.AccountDTO;
 import com.swordmaster.excalibur.entity.Account;
+import com.swordmaster.excalibur.enumclass.AccountType;
 import com.swordmaster.excalibur.enumclass.UserRole;
 import com.swordmaster.excalibur.helper.GoogleAPIHelper;
 import com.swordmaster.excalibur.repository.AccountRepository;
@@ -39,6 +40,7 @@ public class AccountService {
                     .name(googleUserInfo.getName())
                     .picture(googleUserInfo.getPicture())
                     .role(userRole)
+                    .type(AccountType.GOOGLE)
                     .build()
         );
 

@@ -13,6 +13,7 @@ public class AccountDTO {
     private String email;
     private String name;
     private String role;
+    private String type;
     private String accessToken;
     private String refreshToken;
 }
