@@ -1,7 +1,7 @@
 package com.swordmaster.excalibur.dto;
 
 import com.swordmaster.excalibur.entity.Account;
-import com.swordmaster.excalibur.enumclass.AccountType;
+import com.swordmaster.excalibur.enumclass.SignUpType;
 import com.swordmaster.excalibur.enumclass.UserRole;
 import lombok.Getter;
 import lombok.ToString;
@@ -20,7 +20,7 @@ public class SignUpAccountDTO {
                 .email(email)
                 .password(encodedPassword)
                 .role(UserRole.valueOf(role.toUpperCase()))
-                .type(AccountType.NORMAL)
+                .type(SignUpType.NORMAL)
                 .build();
     }
 }

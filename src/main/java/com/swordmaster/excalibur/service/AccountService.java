@@ -5,7 +5,7 @@ import com.swordmaster.excalibur.dto.AccountDTO;
 import com.swordmaster.excalibur.dto.ResponseMessage;
 import com.swordmaster.excalibur.dto.SignUpAccountDTO;
 import com.swordmaster.excalibur.entity.Account;
-import com.swordmaster.excalibur.enumclass.AccountType;
+import com.swordmaster.excalibur.enumclass.SignUpType;
 import com.swordmaster.excalibur.enumclass.Message;
 import com.swordmaster.excalibur.enumclass.UserRole;
 import com.swordmaster.excalibur.helper.GoogleAPIHelper;
@@ -47,7 +47,7 @@ public class AccountService {
                     .name(googleUserInfo.getName())
                     .picture(googleUserInfo.getPicture())
                     .role(userRole)
-                    .type(AccountType.GOOGLE)
+                    .type(SignUpType.GOOGLE)
                     .build()
         );
 
@@ -65,7 +65,7 @@ public class AccountService {
 
     public ResponseEntity<ResponseMessage> signUp(SignUpAccountDTO signUpAccountDTO) {
 
-        if (accountRepository.findByEmailAndType(signUpAccountDTO.getEmail(), AccountType.NORMAL).isPresent()) {
+        if (accountRepository.findByEmailAndType(signUpAccountDTO.getEmail(), SignUpType.NORMAL).isPresent()) {
             return new ResponseEntity<>(new ResponseMessage(Message.EXIST_ACCOUNT), HttpStatus.BAD_REQUEST);
         }
 

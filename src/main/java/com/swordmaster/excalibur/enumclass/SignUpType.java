@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum AccountType {
+public enum SignUpType {
     NORMAL("normal"), GOOGLE("google");
 
     final private String name;

@@ -1,7 +1,7 @@
 package com.swordmaster.excalibur.entity;
 
 import com.swordmaster.excalibur.dto.AccountDTO;
-import com.swordmaster.excalibur.enumclass.AccountType;
+import com.swordmaster.excalibur.enumclass.SignUpType;
 import com.swordmaster.excalibur.enumclass.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,7 +34,7 @@ public class Account extends BaseEntity {
     private UserRole role;
 
     @Column
-    private AccountType type;
+    private SignUpType type;
 
     @Column
     private String password;
