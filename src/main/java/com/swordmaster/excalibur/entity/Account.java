@@ -1,6 +1,7 @@
 package com.swordmaster.excalibur.entity;
 
 import com.swordmaster.excalibur.dto.AccountDTO;
+import com.swordmaster.excalibur.enumclass.SignUpType;
 import com.swordmaster.excalibur.enumclass.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,6 +33,12 @@ public class Account extends BaseEntity {
     @Column
     private UserRole role;
 
+    @Column
+    private SignUpType type;
+
+    @Column
+    private String password;
+
     @Column(name = "accessToken")
     private String accessToken;
 
@@ -43,6 +50,7 @@ public class Account extends BaseEntity {
                 .email(this.email)
                 .name(this.name)
                 .role(this.role.getName())
+                .type(this.type.getName())
                 .accessToken(this.accessToken)
                 .refreshToken(this.refreshToken)
                 .build();
