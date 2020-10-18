@@ -36,6 +36,9 @@ public class Account extends BaseEntity {
     @Column
     private AccountType type;
 
+    @Column
+    private String password;
+
     @Column(name = "accessToken")
     private String accessToken;
 

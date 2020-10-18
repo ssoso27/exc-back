@@ -2,6 +2,7 @@ package com.swordmaster.excalibur.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.swordmaster.excalibur.dto.AccountDTO;
+import com.swordmaster.excalibur.dto.SignUpAccountDTO;
 import com.swordmaster.excalibur.entity.Account;
 import com.swordmaster.excalibur.enumclass.AccountType;
 import com.swordmaster.excalibur.enumclass.UserRole;
@@ -13,10 +14,15 @@ import com.swordmaster.excalibur.vo.Jwt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AccountService {
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
     @Autowired
     GoogleAPIHelper googleAPIHelper;
 
@@ -54,5 +60,16 @@ public class AccountService {
         responseEntity = new ResponseEntity<>(accountDTO, HttpStatus.OK);
 
         return responseEntity;
+    }
+
+    public ResponseEntity<String> signUp(SignUpAccountDTO signUpAccountDTO) {
+
+        if (accountRepository.findByEmailAndType(signUpAccountDTO.getEmail(), AccountType.NORMAL).isPresent()) {
+            return new ResponseEntity<>("이미 가입되어 있는 회원입니다.", HttpStatus.BAD_REQUEST);
+        }
+
+        System.out.println(signUpAccountDTO.toString());
+        accountRepository.save(signUpAccountDTO.toAccount(passwordEncoder.encode(signUpAccountDTO.getPassword())));
+        return new ResponseEntity<>("회원가입 되셨습니다.", HttpStatus.OK);
     }
 }
