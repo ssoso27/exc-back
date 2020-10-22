@@ -29,4 +29,9 @@ public class AccountController {
     public ResponseEntity<ResponseMessage> signUp(@RequestBody SignUpAccountDTO signUpAccountDTO) {
         return accountService.signUp(signUpAccountDTO);
     }
+
+    @PostMapping("/signin")
+    public ResponseEntity<AccountDTO> signIn(@RequestBody SignUpAccountDTO signUpAccountDTO) {
+        return accountService.signIn(signUpAccountDTO);
+    }
 }

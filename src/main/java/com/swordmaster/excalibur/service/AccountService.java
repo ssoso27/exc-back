@@ -19,6 +19,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class AccountService {
     @Autowired
@@ -32,6 +34,10 @@ public class AccountService {
 
     @Autowired
     AccountRepository accountRepository;
+
+    private Boolean validate(SignUpAccountDTO signUpAccountDTO, String encodedPassword) {
+        return passwordEncoder.matches(signUpAccountDTO.getPassword(), encodedPassword);
+    }
 
     public ResponseEntity<AccountDTO> googleSignin(String authCode, UserRole userRole) throws JsonProcessingException {
         ResponseEntity<AccountDTO> responseEntity;
@@ -64,13 +70,33 @@ public class AccountService {
     }
 
     public ResponseEntity<ResponseMessage> signUp(SignUpAccountDTO signUpAccountDTO) {
-
         if (accountRepository.findByEmailAndType(signUpAccountDTO.getEmail(), SignUpType.NORMAL).isPresent()) {
             return new ResponseEntity<>(new ResponseMessage(Message.EXIST_ACCOUNT), HttpStatus.BAD_REQUEST);
         }
 
-        System.out.println(signUpAccountDTO.toString());
         accountRepository.save(signUpAccountDTO.toAccount(passwordEncoder.encode(signUpAccountDTO.getPassword())));
         return new ResponseEntity<>(new ResponseMessage(Message.SIGNUP_SUECCESS), HttpStatus.CREATED);
+    }
+
+    public ResponseEntity<AccountDTO> signIn(SignUpAccountDTO signUpAccountDTO) {
+        Optional<Account> maybeAccount = accountRepository.findByEmail(signUpAccountDTO.getEmail());
+
+        if (maybeAccount.isEmpty()) {
+           return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+
+        Account account = maybeAccount.get();
+        if (!validate(signUpAccountDTO, account.getPassword())) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+
+        Jwt jwt = jwtTokenProvider.generateToken(account.getEmail());
+
+        account.setAccessToken(jwt.getAccessToken());
+        account.setRefreshToken(jwt.getRefreshToken());
+
+        AccountDTO accountDTO = account.toDTO();
+
+        return new ResponseEntity<>(accountDTO, HttpStatus.OK);
     }
 }
