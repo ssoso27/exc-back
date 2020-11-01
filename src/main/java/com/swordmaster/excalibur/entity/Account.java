@@ -47,6 +47,7 @@ public class Account extends BaseEntity {
 
     public AccountDTO toDTO() {
         return AccountDTO.builder()
+                .id(this.id)
                 .email(this.email)
                 .name(this.name)
                 .role(this.role.getName())

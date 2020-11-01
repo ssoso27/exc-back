@@ -10,6 +10,9 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class AccountDTO {
+    @ApiModelProperty(value = "pk", example = "35")
+    private Integer id;
+
     @ApiModelProperty(value = "이메일", example = "skykang104@swordmaster.com")
     private String email;
 
