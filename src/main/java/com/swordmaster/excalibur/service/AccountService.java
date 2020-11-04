@@ -94,6 +94,7 @@ public class AccountService {
 
         account.setAccessToken(jwt.getAccessToken());
         account.setRefreshToken(jwt.getRefreshToken());
+        accountRepository.save(account);
 
         AccountDTO accountDTO = account.toDTO();
 
