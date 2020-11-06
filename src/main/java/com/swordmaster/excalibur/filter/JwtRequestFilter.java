@@ -5,6 +5,7 @@ import com.swordmaster.excalibur.util.JwtTokenProvider;
 import com.swordmaster.excalibur.vo.SecurityUser;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -27,16 +28,13 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        System.out.println("filter start");
         final String authorizationHeader = request.getHeader("Authorization");
-        System.out.println(authorizationHeader);
 
         String jwt = null;
         String email = null;
 
         // jwt 유무 검사 및 토큰 파싱
-        if (authorizationHeader != null) {
-            System.out.println("start jwt parsing");
+        if (authorizationHeader != null && !authorizationHeader.equals("")) {
             jwt = authorizationHeader;
             Claims claims = jwtTokenProvider.parseToken(
                         jwt,
@@ -47,25 +45,19 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             }
         }
 
-        // 인가
-        System.out.println(SecurityContextHolder.getContext().getAuthentication());
-        if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            System.out.println("start authorization " + email);
+        // 인증 객체 넣기
+        if (email != null && (SecurityContextHolder.getContext().getAuthentication() == null || SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken)) {
             SecurityUser securityUser = (SecurityUser) securityUserService.loadUserByUsername(email);
 
-            System.out.println(securityUser);
             if (jwtTokenProvider.validate(jwt, securityUser.getEmail(), JwtTokenProvider.TOKEN_TYPE.ACCESS_TOKEN)) {
-                System.out.println("jwt-user validate ");
                 UsernamePasswordAuthenticationToken authToken
                         = new UsernamePasswordAuthenticationToken(securityUser, null, securityUser.getAuthorities());
 
-                // 이건 뭐지
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
 
-            System.out.println("filter end");
         }
         filterChain.doFilter(request, response);
     }
