@@ -33,8 +33,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .httpBasic()
                 .and()
                 .authorizeRequests()
-                    .antMatchers("/accounts/*") // TODO: 지금은 테스트용으로 해당 url을 걸어두었지만, 꼭 이거 제거해줘야함
-                        .access("isAuthenticated()")
+                    .antMatchers("/swagger-ui/", "/accounts/signup", "/accounts/signin")
+                        .permitAll()
                     .anyRequest().authenticated();
 
         security
