@@ -15,15 +15,15 @@ public class CourseDTO {
     private String name;
 
     @ApiModelProperty(value = "개설한 강의자 pk id", example = "39")
-    private Integer createrId;
+    private Integer accountId;
 
     @ApiModelProperty(value = "초대 코드", example = "141414")
     private String code;
 
-    public Course toCourse() {
+    public Course toCourse(Account account) {
         return Course.builder()
                 .name(this.name)
-                .account(Account.builder().id(this.createrId).build())
+                .account(account)
                 .build();
     }
 }

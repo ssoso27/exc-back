@@ -11,6 +11,7 @@ public enum Message {
     , NON_EXIST_ACCOUNT("존재하지 않는 회원입니다.")
     , NOT_MATCH_EMAIL_PASSWORD("이메일과 비밀번호가 일치하지 않습니다.")
     , SIGNIN_SUCCESS("로그인이 완료되었습니다.")
+    , CREATE_COURSE_SUCCESS("강의가 성공적으로 생성되었습니다.")
     ;
 
     private final String message;
