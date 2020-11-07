@@ -6,11 +6,12 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum UserRole {
-    STUDENT("student"),
-    TEACHER("teacher")
+    STUDENT("student", "ROLE_STUDENT"),
+    TEACHER("teacher", "ROLE_TEACHER")
     ;
 
     final private String name;
+    final private String authority;
 
     @Override
     public String toString() {

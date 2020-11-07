@@ -24,8 +24,7 @@ public class SecurityUser implements UserDetails {
         this.password = account.getPassword();
 
         this.authorities = new ArrayList<>();
-        this.authorities.add(new SimpleGrantedAuthority("user"));
-        this.authorities.add(new SimpleGrantedAuthority(account.getRole().getName()));
+        this.authorities.add(new SimpleGrantedAuthority(account.getRole().getAuthority()));
     }
 
     @Override
