@@ -6,6 +6,7 @@ import com.swordmaster.excalibur.entity.Account;
 import com.swordmaster.excalibur.enumclass.Message;
 import com.swordmaster.excalibur.repository.AccountRepository;
 import com.swordmaster.excalibur.repository.CourseRepository;
+import com.swordmaster.excalibur.util.CourseCodeMaker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +30,8 @@ public class CourseService {
         }
 
         // 초대 코드 만들어주기
+        CourseCodeMaker courseCodeMaker = new CourseCodeMaker();
+        courseDTO.setCode(courseCodeMaker.makeCode());
 
         courseRepository.save(courseDTO.toCourse(maybeAccount.get()));
 

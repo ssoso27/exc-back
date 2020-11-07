@@ -24,6 +24,7 @@ public class CourseDTO {
         return Course.builder()
                 .name(this.name)
                 .account(account)
+                .code(code)
                 .build();
     }
 }

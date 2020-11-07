@@ -33,6 +33,7 @@ public class Course extends BaseEntity {
         return CourseDTO.builder()
                 .name(name)
                 .accountId(id)
+                .code(code)
                 .build();
     }
 }
