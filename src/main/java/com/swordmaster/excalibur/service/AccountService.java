@@ -2,7 +2,7 @@ package com.swordmaster.excalibur.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.swordmaster.excalibur.dto.AccountDTO;
-import com.swordmaster.excalibur.dto.ResponseMessage;
+import com.swordmaster.excalibur.dto.ResponseObject;
 import com.swordmaster.excalibur.dto.SignUpAccountDTO;
 import com.swordmaster.excalibur.entity.Account;
 import com.swordmaster.excalibur.enumclass.SignUpType;
@@ -69,34 +69,35 @@ public class AccountService {
         return responseEntity;
     }
 
-    public ResponseEntity<ResponseMessage> signUp(SignUpAccountDTO signUpAccountDTO) {
+    public ResponseEntity<ResponseObject> signUp(SignUpAccountDTO signUpAccountDTO) {
         if (accountRepository.findByEmailAndType(signUpAccountDTO.getEmail(), SignUpType.NORMAL).isPresent()) {
-            return new ResponseEntity<>(new ResponseMessage(Message.EXIST_ACCOUNT), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new ResponseObject(Message.EXIST_ACCOUNT, signUpAccountDTO.getEmail()), HttpStatus.BAD_REQUEST);
         }
 
         accountRepository.save(signUpAccountDTO.toAccount(passwordEncoder.encode(signUpAccountDTO.getPassword())));
-        return new ResponseEntity<>(new ResponseMessage(Message.SIGNUP_SUECCESS), HttpStatus.CREATED);
+        return new ResponseEntity<>(new ResponseObject(Message.SIGNUP_SUCCESS, signUpAccountDTO.getEmail()), HttpStatus.CREATED);
     }
 
-    public ResponseEntity<AccountDTO> signIn(SignUpAccountDTO signUpAccountDTO) {
+    public ResponseEntity<ResponseObject> signIn(SignUpAccountDTO signUpAccountDTO) {
         Optional<Account> maybeAccount = accountRepository.findByEmail(signUpAccountDTO.getEmail());
 
         if (maybeAccount.isEmpty()) {
-           return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+           return new ResponseEntity<>(new ResponseObject(Message.NON_EXIST_ACCOUNT, signUpAccountDTO.getEmail()), HttpStatus.BAD_REQUEST);
         }
 
         Account account = maybeAccount.get();
         if (!validate(signUpAccountDTO, account.getPassword())) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new ResponseObject(Message.NOT_MATCH_EMAIL_PASSWORD, signUpAccountDTO.getEmail()), HttpStatus.BAD_REQUEST);
         }
 
         Jwt jwt = jwtTokenProvider.generateToken(account.getEmail());
 
         account.setAccessToken(jwt.getAccessToken());
         account.setRefreshToken(jwt.getRefreshToken());
+        accountRepository.save(account);
 
         AccountDTO accountDTO = account.toDTO();
 
-        return new ResponseEntity<>(accountDTO, HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseObject(Message.SIGNIN_SUCCESS, accountDTO), HttpStatus.OK);
     }
 }

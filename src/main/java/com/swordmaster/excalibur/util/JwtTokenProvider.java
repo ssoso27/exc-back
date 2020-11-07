@@ -47,7 +47,7 @@ public class JwtTokenProvider {
         }
     }
 
-    private TokenTypeData makeTokenTypeData(TOKEN_TYPE tokenType) {
+    public TokenTypeData makeTokenTypeData(TOKEN_TYPE tokenType) {
         String key = null;
         long time = 0;
 
@@ -86,7 +86,7 @@ public class JwtTokenProvider {
     }
 
     // 토큰 파싱
-    private Claims parseToken(String token, TokenTypeData ttd) {
+    public Claims parseToken(String token, TokenTypeData ttd) {
         Claims claims = null;
 
         try {
@@ -112,7 +112,6 @@ public class JwtTokenProvider {
     // 토큰 검증
     public Boolean validate(String token, String email, TOKEN_TYPE token_type) {
         Claims claims = this.parseToken(token, this.makeTokenTypeData(token_type));
-        System.out.println(claims);
         return email.equals(claims.getSubject()) && !isExpired(claims.getExpiration());
     }
 }
