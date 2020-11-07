@@ -17,6 +17,9 @@ public class CourseDTO {
     @ApiModelProperty(value = "개설한 강의자 pk id", example = "39")
     private Integer createrId;
 
+    @ApiModelProperty(value = "초대 코드", example = "141414")
+    private String code;
+
     public Course toCourse() {
         return Course.builder()
                 .name(this.name)

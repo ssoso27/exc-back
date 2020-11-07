@@ -26,6 +26,9 @@ public class Course extends BaseEntity {
     @JoinColumn(name="accountId", nullable = false)
     private Account account;
 
+    @Column
+    private String code;
+
     public CourseDTO toDTO() {
         return CourseDTO.builder()
                 .name(name)

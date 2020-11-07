@@ -27,7 +27,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity security) throws Exception
     {
-        // TODO: swagger, signin, signup 풀어줘야함
         security
                 .csrf().disable()
                 .httpBasic()
