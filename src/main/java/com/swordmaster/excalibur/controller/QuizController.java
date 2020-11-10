@@ -28,4 +28,11 @@ public class QuizController {
         return quizService.create(quizDTO);
     }
 
+    @ApiOperation(value = "퀴즈 목록보기", notes = "현재 분석세션에 추가된 퀴즈 목록을 확인합니다.")
+    @PreAuthorize("isAuthenticated() and hasRole('ROLE_TEACHER')")
+    @GetMapping("")
+    public ResponseEntity<ResponseObject> list(@PathVariable Integer analysisSessionId) {
+        return quizService.list(analysisSessionId);
+    }
+
 }
