@@ -12,7 +12,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class QuizDTO {
+public class InsertQuizDTO {
     @ApiModelProperty(value = "분셕세션 pk", example = "1")
     private Integer analysisSessionId;
 
@@ -31,9 +31,6 @@ public class QuizDTO {
     @ApiModelProperty(value = "정답 번호", example = "3")
     private Integer answer;
 
-    @ApiModelProperty(value = "출제 여부 (0 false, 1 true)", example = "0")
-    private Integer isPick;
-
     public Quiz toQuiz() {
         return Quiz.builder()
                 .analysisSession(AnalysisSession.builder().id(this.analysisSessionId).build())
@@ -42,7 +39,6 @@ public class QuizDTO {
                 .example2(this.example2)
                 .example3(this.example3)
                 .answer(this.answer)
-                .isPick(this.isPick)
                 .build();
     }
 }

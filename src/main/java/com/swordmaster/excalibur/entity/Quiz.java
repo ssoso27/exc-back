@@ -1,6 +1,6 @@
 package com.swordmaster.excalibur.entity;
 
-import com.swordmaster.excalibur.dto.QuizDTO;
+import com.swordmaster.excalibur.dto.InsertQuizDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -36,8 +36,11 @@ public class Quiz extends BaseEntity {
     @Column
     private Integer answer;
 
-    public QuizDTO toDTO() {
-        return QuizDTO.builder()
+    @Column(columnDefinition = "TINYINT", length = 1)
+    private Integer isPick;
+
+    public InsertQuizDTO toInsertDTO() {
+        return InsertQuizDTO.builder()
                 .analysisSessionId(analysisSession.getId())
                 .content(content)
                 .example1(example1)

@@ -1,6 +1,6 @@
 package com.swordmaster.excalibur.service;
 
-import com.swordmaster.excalibur.dto.QuizDTO;
+import com.swordmaster.excalibur.dto.InsertQuizDTO;
 import com.swordmaster.excalibur.dto.ResponseObject;
 import com.swordmaster.excalibur.entity.AnalysisSession;
 import com.swordmaster.excalibur.entity.Quiz;
@@ -12,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,14 +24,14 @@ public class QuizService {
     @Autowired
     AnalysisSessionRepository sessionRepository;
 
-    public ResponseEntity<ResponseObject> create(QuizDTO quizDTO) {
+    public ResponseEntity<ResponseObject> create(InsertQuizDTO insertQuizDTO) {
 
-        if (!sessionRepository.existsById(quizDTO.getAnalysisSessionId())) {
-            return new ResponseEntity<>(new ResponseObject(Message.DO_NOT_HAVE_THIS_SESSION, quizDTO), HttpStatus.FORBIDDEN);
+        if (!sessionRepository.existsById(insertQuizDTO.getAnalysisSessionId())) {
+            return new ResponseEntity<>(new ResponseObject(Message.DO_NOT_HAVE_THIS_SESSION, insertQuizDTO), HttpStatus.FORBIDDEN);
         }
 
-        Quiz quiz = quizRepository.save(quizDTO.toQuiz());
-        return new ResponseEntity<>(new ResponseObject(Message.CREATE_QUIZ_SUCCESS, quiz.toDTO()), HttpStatus.CREATED);
+        Quiz quiz = quizRepository.save(insertQuizDTO.toQuiz());
+        return new ResponseEntity<>(new ResponseObject(Message.CREATE_QUIZ_SUCCESS, quiz.toInsertDTO()), HttpStatus.CREATED);
     }
 
     public ResponseEntity<ResponseObject> list(Integer analysisSessionId) {
@@ -44,6 +43,6 @@ public class QuizService {
 
         List<Quiz> quizList = quizRepository.findAllByAnalysisSessionId(analysisSessionId);
 
-        return new ResponseEntity<>(new ResponseObject(Message.LIST_QUIZ_SUCCESS, quizList.stream().map(Quiz::toDTO)), HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseObject(Message.LIST_QUIZ_SUCCESS, quizList.stream().map(Quiz::toInsertDTO)), HttpStatus.OK);
     }
 }

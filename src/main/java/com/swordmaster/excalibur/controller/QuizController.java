@@ -1,6 +1,6 @@
 package com.swordmaster.excalibur.controller;
 
-import com.swordmaster.excalibur.dto.QuizDTO;
+import com.swordmaster.excalibur.dto.InsertQuizDTO;
 import com.swordmaster.excalibur.dto.ResponseObject;
 import com.swordmaster.excalibur.enumclass.Message;
 import com.swordmaster.excalibur.service.QuizService;
@@ -20,12 +20,12 @@ public class QuizController {
     @ApiOperation(value = "퀴즈 생성하기", notes = "강의자가 자신의 분석세션에 강의를 수동으로 추가합니다.")
     @PreAuthorize("isAuthenticated() and hasRole('ROLE_TEACHER')")
     @PostMapping("")
-    public ResponseEntity<ResponseObject> create(@PathVariable Integer analysisSessionId, @RequestBody QuizDTO quizDTO) {
-        if (!analysisSessionId.equals(quizDTO.getAnalysisSessionId())) {
+    public ResponseEntity<ResponseObject> create(@PathVariable Integer analysisSessionId, @RequestBody InsertQuizDTO insertQuizDTO) {
+        if (!analysisSessionId.equals(insertQuizDTO.getAnalysisSessionId())) {
             return new ResponseEntity<>(new ResponseObject(Message.NOT_MATCH_PATH_BODY, null), HttpStatus.BAD_REQUEST);
         }
 
-        return quizService.create(quizDTO);
+        return quizService.create(insertQuizDTO);
     }
 
     @ApiOperation(value = "퀴즈 목록보기", notes = "현재 분석세션에 추가된 퀴즈 목록을 확인합니다.")
