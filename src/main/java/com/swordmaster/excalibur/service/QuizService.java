@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class QuizService {
@@ -35,6 +36,12 @@ public class QuizService {
     }
 
     public ResponseEntity<ResponseObject> list(Integer analysisSessionId) {
+        Optional<AnalysisSession> maybeSession = sessionRepository.findById(analysisSessionId);
+
+        if (maybeSession.isEmpty()) {
+            return new ResponseEntity<>(new ResponseObject(Message.NOT_EXIST_ANALYSIS_SESSION, null), HttpStatus.BAD_REQUEST);
+        }
+
         List<Quiz> quizList = quizRepository.findAllByAnalysisSessionId(analysisSessionId);
 
         return new ResponseEntity<>(new ResponseObject(Message.LIST_QUIZ_SUCCESS, quizList.stream().map(Quiz::toDTO)), HttpStatus.OK);
