@@ -1,15 +1,16 @@
 package com.swordmaster.excalibur.entity;
 
+import com.swordmaster.excalibur.dto.InsertQuizDTO;
 import com.swordmaster.excalibur.dto.QuizDTO;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name="quiz")
 @Builder
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Quiz extends BaseEntity {
@@ -36,8 +37,23 @@ public class Quiz extends BaseEntity {
     @Column
     private Integer answer;
 
+    @Column(columnDefinition = "TINYINT", length = 1)
+    private Integer isPick;
+
     public QuizDTO toDTO() {
         return QuizDTO.builder()
+                .analysisSessionId(analysisSession.getId())
+                .content(content)
+                .example1(example1)
+                .example2(example2)
+                .example3(example3)
+                .answer(answer)
+                .isPick(isPick)
+                .build();
+    }
+
+    public InsertQuizDTO toInsertDTO() {
+        return InsertQuizDTO.builder()
                 .analysisSessionId(analysisSession.getId())
                 .content(content)
                 .example1(example1)
