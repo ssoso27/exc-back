@@ -45,4 +45,20 @@ public class QuizService {
 
         return new ResponseEntity<>(new ResponseObject(Message.LIST_QUIZ_SUCCESS, quizList.stream().map(Quiz::toInsertDTO)), HttpStatus.OK);
     }
+
+    public ResponseEntity<ResponseObject> pick(Integer analysisSessionId, Integer quizId) {
+        Optional<Quiz> maybeQuiz = quizRepository.findByIdAndAnalysisSessionId(quizId, analysisSessionId);
+        if (maybeQuiz.isEmpty()) {
+            return new ResponseEntity<>(new ResponseObject(Message.NOT_EXIST_QUIZ, null), HttpStatus.BAD_REQUEST);
+        }
+
+        Quiz quiz = maybeQuiz.get();
+        if (quiz.getIsPick() == 1) {
+            return new ResponseEntity<>(new ResponseObject(Message.ALREADY_PICKED_QUIZ, null), HttpStatus.BAD_REQUEST);
+        }
+        
+        quiz.setIsPick(1);
+        quizRepository.save(quiz);
+        return new ResponseEntity<>(new ResponseObject(Message.PICK_QUIZ_SUCCESS, quiz.toInsertDTO()), HttpStatus.OK);
+    }
 }

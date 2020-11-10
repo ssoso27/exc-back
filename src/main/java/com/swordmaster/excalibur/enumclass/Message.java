@@ -17,6 +17,9 @@ public enum Message {
     , NOT_MATCH_PATH_BODY("path의 값과 body의 값이 일치하지 않습니다.")
     , LIST_QUIZ_SUCCESS("퀴즈 목록을 성공적으로 불러왔습니다.")
     , NOT_EXIST_ANALYSIS_SESSION("존재하지 않는 분석세션입니다.")
+    , NOT_EXIST_QUIZ("존재하지 않는 퀴즈입니다.")
+    , PICK_QUIZ_SUCCESS("퀴즈가 성공적으로 출제되었습니다.")
+    , ALREADY_PICKED_QUIZ("이미 출제된 퀴즈입니다.")
     ;
 
     private final String message;

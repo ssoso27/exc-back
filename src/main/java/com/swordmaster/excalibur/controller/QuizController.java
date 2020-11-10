@@ -4,6 +4,7 @@ import com.swordmaster.excalibur.dto.InsertQuizDTO;
 import com.swordmaster.excalibur.dto.ResponseObject;
 import com.swordmaster.excalibur.enumclass.Message;
 import com.swordmaster.excalibur.service.QuizService;
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,6 +34,13 @@ public class QuizController {
     @GetMapping("")
     public ResponseEntity<ResponseObject> list(@PathVariable Integer analysisSessionId) {
         return quizService.list(analysisSessionId);
+    }
+
+    @ApiModelProperty(value = "퀴즈 출제하기", notes = "특정 퀴즈를 선택하여 출제한다.")
+    @PreAuthorize("isAuthenticated() and hasRole('ROLE_TEACHER')")
+    @PostMapping("/{quizId}/pick")
+    public ResponseEntity<ResponseObject> pick(@PathVariable Integer analysisSessionId, @PathVariable Integer quizId) {
+        return quizService.pick(analysisSessionId, quizId);
     }
 
 }
