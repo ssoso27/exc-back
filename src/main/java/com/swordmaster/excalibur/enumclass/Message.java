@@ -15,6 +15,7 @@ public enum Message {
     , CREATE_QUIZ_SUCCESS("퀴즈가 성공적으로 생성되었습니다.")
     , DO_NOT_HAVE_THIS_SESSION("해당 분석세션을 생성한 강의자가 아닙니다.")
     , NOT_MATCH_PATH_BODY("path의 값과 body의 값이 일치하지 않습니다.")
+    , LIST_QUIZ_SUCCESS("퀴즈 목록을 성공적으로 불러왔습니다.")
     ;
 
     private final String message;
