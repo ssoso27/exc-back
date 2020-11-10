@@ -10,9 +10,6 @@ import lombok.ToString;
 @Getter
 @ToString
 public class SignUpAccountDTO {
-    @ApiModelProperty(value = "pk", example = "35")
-    private Integer id;
-
     @ApiModelProperty(value = "이름", example = "강하늘")
     private String name;
 
