@@ -43,7 +43,7 @@ public class QuizService {
 
         List<Quiz> quizList = quizRepository.findAllByAnalysisSessionId(analysisSessionId);
 
-        return new ResponseEntity<>(new ResponseObject(Message.LIST_QUIZ_SUCCESS, quizList.stream().map(Quiz::toInsertDTO)), HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseObject(Message.LIST_QUIZ_SUCCESS, quizList.stream().map(Quiz::toDTO)), HttpStatus.OK);
     }
 
     public ResponseEntity<ResponseObject> pick(Integer analysisSessionId, Integer quizId) {
@@ -56,7 +56,7 @@ public class QuizService {
         if (quiz.getIsPick() == 1) {
             return new ResponseEntity<>(new ResponseObject(Message.ALREADY_PICKED_QUIZ, null), HttpStatus.BAD_REQUEST);
         }
-        
+
         quiz.setIsPick(1);
         quizRepository.save(quiz);
         return new ResponseEntity<>(new ResponseObject(Message.PICK_QUIZ_SUCCESS, quiz.toInsertDTO()), HttpStatus.OK);

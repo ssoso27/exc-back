@@ -40,7 +40,7 @@ public class Quiz extends BaseEntity {
     @Column(columnDefinition = "TINYINT", length = 1)
     private Integer isPick;
 
-    public QuizDTO quizDTO() {
+    public QuizDTO toDTO() {
         return QuizDTO.builder()
                 .analysisSessionId(analysisSession.getId())
                 .content(content)
