@@ -13,6 +13,7 @@ public enum Message {
     , SIGNIN_SUCCESS("로그인이 완료되었습니다.")
     , CREATE_COURSE_SUCCESS("강의가 성공적으로 생성되었습니다.")
     , CREATE_QUIZ_SUCCESS("퀴즈가 성공적으로 생성되었습니다.")
+    , DO_NOT_HAVE_THIS_SESSION("해당 분석세션을 생성한 강의자가 아닙니다.")
     ;
 
     private final String message;
