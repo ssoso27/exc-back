@@ -3,6 +3,7 @@ package com.swordmaster.excalibur.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.swordmaster.excalibur.dto.AccountDTO;
 import com.swordmaster.excalibur.dto.ResponseObject;
+import com.swordmaster.excalibur.dto.SignInAccountDTO;
 import com.swordmaster.excalibur.dto.SignUpAccountDTO;
 import com.swordmaster.excalibur.enumclass.UserRole;
 import com.swordmaster.excalibur.service.AccountService;
@@ -34,7 +35,8 @@ public class AccountController {
 
     @ApiOperation(value="로그인", notes="로그인 성공 시 로그인 된 유저 정보와 jwt 토큰을 반환합니다.")
     @PostMapping("/signin")
-    public ResponseEntity<ResponseObject> signIn(@RequestBody SignUpAccountDTO signUpAccountDTO) {
-        return accountService.signIn(signUpAccountDTO);
+    public ResponseEntity<ResponseObject> signIn(@RequestBody SignInAccountDTO signInAccountDTO) {
+
+        return accountService.signIn(signInAccountDTO);
     }
 }

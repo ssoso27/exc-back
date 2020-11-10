@@ -3,6 +3,7 @@ package com.swordmaster.excalibur.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.swordmaster.excalibur.dto.AccountDTO;
 import com.swordmaster.excalibur.dto.ResponseObject;
+import com.swordmaster.excalibur.dto.SignInAccountDTO;
 import com.swordmaster.excalibur.dto.SignUpAccountDTO;
 import com.swordmaster.excalibur.entity.Account;
 import com.swordmaster.excalibur.enumclass.SignUpType;
@@ -35,8 +36,8 @@ public class AccountService {
     @Autowired
     AccountRepository accountRepository;
 
-    private Boolean validate(SignUpAccountDTO signUpAccountDTO, String encodedPassword) {
-        return passwordEncoder.matches(signUpAccountDTO.getPassword(), encodedPassword);
+    private Boolean validate(String inputPassword, String encodedPassword) {
+        return passwordEncoder.matches(inputPassword, encodedPassword);
     }
 
     public ResponseEntity<AccountDTO> googleSignin(String authCode, UserRole userRole) throws JsonProcessingException {
@@ -78,16 +79,16 @@ public class AccountService {
         return new ResponseEntity<>(new ResponseObject(Message.SIGNUP_SUCCESS, signUpAccountDTO.getEmail()), HttpStatus.CREATED);
     }
 
-    public ResponseEntity<ResponseObject> signIn(SignUpAccountDTO signUpAccountDTO) {
-        Optional<Account> maybeAccount = accountRepository.findByEmail(signUpAccountDTO.getEmail());
+    public ResponseEntity<ResponseObject> signIn(SignInAccountDTO signInAccountDTO) {
+        Optional<Account> maybeAccount = accountRepository.findByEmail(signInAccountDTO.getEmail());
 
         if (maybeAccount.isEmpty()) {
-           return new ResponseEntity<>(new ResponseObject(Message.NON_EXIST_ACCOUNT, signUpAccountDTO.getEmail()), HttpStatus.BAD_REQUEST);
+           return new ResponseEntity<>(new ResponseObject(Message.NON_EXIST_ACCOUNT, signInAccountDTO.getEmail()), HttpStatus.BAD_REQUEST);
         }
 
         Account account = maybeAccount.get();
-        if (!validate(signUpAccountDTO, account.getPassword())) {
-            return new ResponseEntity<>(new ResponseObject(Message.NOT_MATCH_EMAIL_PASSWORD, signUpAccountDTO.getEmail()), HttpStatus.BAD_REQUEST);
+        if (!validate(signInAccountDTO.getPassword(), account.getPassword())) {
+            return new ResponseEntity<>(new ResponseObject(Message.NOT_MATCH_EMAIL_PASSWORD, signInAccountDTO.getEmail()), HttpStatus.BAD_REQUEST);
         }
 
         Jwt jwt = jwtTokenProvider.generateToken(account.getEmail());
