@@ -4,9 +4,11 @@ import com.swordmaster.excalibur.dto.InsertQuizDTO;
 import com.swordmaster.excalibur.dto.ResponseObject;
 import com.swordmaster.excalibur.entity.AnalysisSession;
 import com.swordmaster.excalibur.entity.Quiz;
+import com.swordmaster.excalibur.entity.Submission;
 import com.swordmaster.excalibur.enumclass.Message;
 import com.swordmaster.excalibur.repository.AnalysisSessionRepository;
 import com.swordmaster.excalibur.repository.QuizRepository;
+import com.swordmaster.excalibur.repository.SubmissionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,12 +16,16 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class QuizService {
 
     @Autowired
     QuizRepository quizRepository;
+
+    @Autowired
+    SubmissionRepository submissionRepository;
 
     @Autowired
     AnalysisSessionRepository sessionRepository;
@@ -65,5 +71,28 @@ public class QuizService {
         quiz.setIsPick(1);
         quizRepository.save(quiz);
         return new ResponseEntity<>(new ResponseObject(Message.PICK_QUIZ_SUCCESS, quiz.toDTO()), HttpStatus.OK);
+    }
+
+    public ResponseEntity<ResponseObject> getLatestQuiz(Integer accountId, Integer analysisSessionId) {
+        List<Quiz> allQuizList = quizRepository.findAllByAnalysisSessionIdAndIsPick(analysisSessionId, 1);
+        List<Submission> submissionList = submissionRepository.findAllByAccountId(accountId);
+
+        int allSize = allQuizList.size();
+        int submitSize = submissionList.size();
+
+        if (allSize > submitSize) { // 아직 수강생에게 보내지지 않은 퀴즈가 존재함
+            List<Quiz> notTransmitList = allQuizList.subList(submitSize, allSize);
+            List<Submission> insertSubmissionList = notTransmitList.stream()
+                                                        .map(quiz -> new Submission(accountId, quiz.getId()))
+                                                        .collect(Collectors.toList());
+            submissionRepository.saveAll(insertSubmissionList);
+
+            return new ResponseEntity<>(
+                    new ResponseObject(Message.QUIZ_TRANSMIT_SUCCESS, allQuizList.get(allSize-1).toDTO())
+                    , HttpStatus.OK);
+
+        } else { // 출제된 모든 퀴즈를 수강생에게 보낸 상태
+            return new ResponseEntity<>(new ResponseObject(Message.ALREADY_ALL_QUIZ_TRANSMIT, null), HttpStatus.OK);
+        }
     }
 }

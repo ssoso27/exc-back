@@ -10,6 +10,7 @@ import java.util.Optional;
 @Repository
 public interface QuizRepository extends JpaRepository<Quiz, Integer> {
     public List<Quiz> findAllByAnalysisSessionId(Integer analysisSessionId);
+    public List<Quiz> findAllByAnalysisSessionIdAndIsPick(Integer analysisSessionId, Integer isPick);
     public Optional<Quiz> findByIdAndAnalysisSessionId(Integer id, Integer analysisSessionId);
 
 }

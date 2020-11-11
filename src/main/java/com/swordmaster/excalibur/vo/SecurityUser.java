@@ -10,6 +10,7 @@ import java.util.ArrayList;
 // 인증을 위한 User 객체
 @Getter
 public class SecurityUser implements UserDetails {
+    private Integer id;
     private String email;
     private String password;
     private ArrayList<SimpleGrantedAuthority> authorities;
@@ -20,6 +21,7 @@ public class SecurityUser implements UserDetails {
     private boolean isEnabled = true;
 
     public SecurityUser(Account account) {
+        this.id = account.getId();
         this.email = account.getEmail();
         this.password = account.getPassword();
 
@@ -35,7 +37,8 @@ public class SecurityUser implements UserDetails {
     @Override
     public String toString() {
         return "SecurityUser{" +
-                "email='" + email + '\'' +
+                "id=" + id +
+                ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", authorities=" + authorities +
                 '}';

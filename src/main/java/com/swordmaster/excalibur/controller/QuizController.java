@@ -4,12 +4,14 @@ import com.swordmaster.excalibur.dto.InsertQuizDTO;
 import com.swordmaster.excalibur.dto.ResponseObject;
 import com.swordmaster.excalibur.enumclass.Message;
 import com.swordmaster.excalibur.service.QuizService;
+import com.swordmaster.excalibur.vo.SecurityUser;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -46,11 +48,20 @@ public class QuizController {
         return quizService.list(analysisSessionId);
     }
 
-    @ApiModelProperty(value = "퀴즈 출제하기", notes = "특정 퀴즈를 선택하여 출제한다.")
+    @ApiOperation(value = "퀴즈 출제하기", notes = "특정 퀴즈를 선택하여 출제한다.")
     @PreAuthorize("isAuthenticated() and hasRole('ROLE_TEACHER')")
     @PostMapping("/{quizId}/pick")
     public ResponseEntity<ResponseObject> pick(@PathVariable Integer analysisSessionId, @PathVariable Integer quizId) {
         return quizService.pick(analysisSessionId, quizId);
+    }
+
+    @ApiOperation(value = "(수강생) 최신 출제된 퀴즈 가져오기", notes = "가장 최신의 출제된 퀴즈를 아직 받지 못했으면 가져온다 (받았으면 null)")
+    @PreAuthorize("isAuthenticated() and hasRole('ROLE_STUDENT')")
+    @GetMapping("/not-transmit")
+    public ResponseEntity<ResponseObject> getLatestQuiz(@PathVariable Integer analysisSessionId) {
+        SecurityUser securityUser = (SecurityUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        return quizService.getLatestQuiz(securityUser.getId(), analysisSessionId);
     }
 
 }

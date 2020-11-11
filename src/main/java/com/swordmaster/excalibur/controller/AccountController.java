@@ -45,7 +45,6 @@ public class AccountController {
     @PreAuthorize("isAuthenticated() and hasRole('ROLE_TEACHER')")
     @GetMapping("/{accountId}/teacher/courses")
     public ResponseEntity<ResponseObject> teacherCourseList(@PathVariable Integer accountId) {
-        System.out.println(accountId);
         return accountService.teacherCourseList(accountId);
     }
 }
