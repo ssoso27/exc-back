@@ -13,6 +13,9 @@ import lombok.ToString;
 @Setter
 @ToString
 public class QuizDTO {
+    @ApiModelProperty(value = "퀴즈 pk", example = "4")
+    private Integer id;
+
     @ApiModelProperty(value = "분셕세션 pk", example = "1")
     private Integer analysisSessionId;
 
