@@ -31,6 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             , "/swagger-ui/**"
             , "/webjars/**"
             , "/analysis-sessions/**/quizzes/auto"
+            , "/analysis-sessions/**/accounts/**/drowsinesses"
     };
 
     @Autowired

@@ -42,6 +42,7 @@ public class Quiz extends BaseEntity {
 
     public QuizDTO toDTO() {
         return QuizDTO.builder()
+                .id(id)
                 .analysisSessionId(analysisSession.getId())
                 .content(content)
                 .example1(example1)
