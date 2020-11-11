@@ -29,6 +29,16 @@ public class QuizController {
         return quizService.create(insertQuizDTO);
     }
 
+    @ApiOperation(value = "(AI) 자동생성된 퀴즈 추가하기", notes = "AI가 자동생성한 퀴즈를 추가합니다.")
+    @PostMapping("/auto")
+    public ResponseEntity<ResponseObject> autoCreate(@PathVariable Integer analysisSessionId, @RequestBody InsertQuizDTO insertQuizDTO) {
+        if (!analysisSessionId.equals(insertQuizDTO.getAnalysisSessionId())) {
+            return new ResponseEntity<>(new ResponseObject(Message.NOT_MATCH_PATH_BODY, null), HttpStatus.BAD_REQUEST);
+        }
+
+        return quizService.autoCreate(insertQuizDTO);
+    }
+
     @ApiOperation(value = "퀴즈 목록보기", notes = "현재 분석세션에 추가된 퀴즈 목록을 확인합니다.")
     @PreAuthorize("isAuthenticated() and hasRole('ROLE_TEACHER')")
     @GetMapping("")
