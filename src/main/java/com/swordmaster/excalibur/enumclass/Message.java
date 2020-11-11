@@ -22,6 +22,8 @@ public enum Message {
     , ALREADY_PICKED_QUIZ("이미 출제된 퀴즈입니다.")
     , INSERT_DROWSINESS_SUCCESS("졸음구간 저장에 성공하였습니다.")
     , LIST_COURSE_SUCCESS("강의 목록을 성공적으로 불러왔습니다.")
+    , ALREADY_ALL_QUIZ_TRANSMIT("이미 출제된 모든 퀴즈를 보냈습니다.")
+    , QUIZ_TRANSMIT_SUCCESS("최신 퀴즈를 성공적으로 불러왔습니다.")
     ;
 
     private final String message;
