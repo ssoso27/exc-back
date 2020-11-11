@@ -6,11 +6,13 @@ import com.swordmaster.excalibur.dto.ResponseObject;
 import com.swordmaster.excalibur.dto.SignInAccountDTO;
 import com.swordmaster.excalibur.dto.SignUpAccountDTO;
 import com.swordmaster.excalibur.entity.Account;
+import com.swordmaster.excalibur.entity.Course;
 import com.swordmaster.excalibur.enumclass.SignUpType;
 import com.swordmaster.excalibur.enumclass.Message;
 import com.swordmaster.excalibur.enumclass.UserRole;
 import com.swordmaster.excalibur.helper.GoogleAPIHelper;
 import com.swordmaster.excalibur.repository.AccountRepository;
+import com.swordmaster.excalibur.repository.CourseRepository;
 import com.swordmaster.excalibur.util.JwtTokenProvider;
 import com.swordmaster.excalibur.vo.GoogleUserInfo;
 import com.swordmaster.excalibur.vo.Jwt;
@@ -20,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -35,6 +38,9 @@ public class AccountService {
 
     @Autowired
     AccountRepository accountRepository;
+
+    @Autowired
+    CourseRepository courseRepository;
 
     private Boolean validate(String inputPassword, String encodedPassword) {
         return passwordEncoder.matches(inputPassword, encodedPassword);
@@ -100,5 +106,12 @@ public class AccountService {
         AccountDTO accountDTO = account.toDTO();
 
         return new ResponseEntity<>(new ResponseObject(Message.SIGNIN_SUCCESS, accountDTO), HttpStatus.OK);
+    }
+
+    public ResponseEntity<ResponseObject> teacherCourseList(Integer accountId) {
+        List<Course> courses = courseRepository.findAllByAccountId(accountId);
+        
+        return new ResponseEntity<>(
+                new ResponseObject(Message.LIST_COURSE_SUCCESS, courses.stream().map(Course::toDTO)), HttpStatus.OK);
     }
 }

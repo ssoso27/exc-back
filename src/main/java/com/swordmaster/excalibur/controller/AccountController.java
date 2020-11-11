@@ -10,6 +10,7 @@ import com.swordmaster.excalibur.service.AccountService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -38,5 +39,13 @@ public class AccountController {
     public ResponseEntity<ResponseObject> signIn(@RequestBody SignInAccountDTO signInAccountDTO) {
 
         return accountService.signIn(signInAccountDTO);
+    }
+
+    @ApiOperation(value = "(강의자) 개설 강의 목록 확인", notes = "해당 강의자가 개설한 강의 목록을 반환합니다.")
+    @PreAuthorize("isAuthenticated() and hasRole('ROLE_TEACHER')")
+    @GetMapping("/{accountId}/teacher/courses")
+    public ResponseEntity<ResponseObject> teacherCourseList(@PathVariable Integer accountId) {
+        System.out.println(accountId);
+        return accountService.teacherCourseList(accountId);
     }
 }
