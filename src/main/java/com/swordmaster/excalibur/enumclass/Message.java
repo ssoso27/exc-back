@@ -20,6 +20,7 @@ public enum Message {
     , NOT_EXIST_QUIZ("존재하지 않는 퀴즈입니다.")
     , PICK_QUIZ_SUCCESS("퀴즈가 성공적으로 출제되었습니다.")
     , ALREADY_PICKED_QUIZ("이미 출제된 퀴즈입니다.")
+    , INSERT_DROWSINESS_SUCCESS("졸음구간 저장에 성공하였습니다.")
     ;
 
     private final String message;
