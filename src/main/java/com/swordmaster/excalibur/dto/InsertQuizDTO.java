@@ -39,6 +39,7 @@ public class InsertQuizDTO {
                 .example2(this.example2)
                 .example3(this.example3)
                 .answer(this.answer)
+                .isPick(0)
                 .build();
     }
 }

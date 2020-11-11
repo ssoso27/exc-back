@@ -31,7 +31,12 @@ public class QuizService {
         }
 
         Quiz quiz = quizRepository.save(insertQuizDTO.toQuiz());
-        return new ResponseEntity<>(new ResponseObject(Message.CREATE_QUIZ_SUCCESS, quiz.toInsertDTO()), HttpStatus.CREATED);
+        return new ResponseEntity<>(new ResponseObject(Message.CREATE_QUIZ_SUCCESS, quiz.toDTO()), HttpStatus.CREATED);
+    }
+
+    public ResponseEntity<ResponseObject> autoCreate(InsertQuizDTO insertQuizDTO) {
+        Quiz quiz = quizRepository.save(insertQuizDTO.toQuiz());
+        return new ResponseEntity<>(new ResponseObject(Message.CREATE_QUIZ_SUCCESS, quiz.toDTO()), HttpStatus.CREATED);
     }
 
     public ResponseEntity<ResponseObject> list(Integer analysisSessionId) {
@@ -59,6 +64,6 @@ public class QuizService {
 
         quiz.setIsPick(1);
         quizRepository.save(quiz);
-        return new ResponseEntity<>(new ResponseObject(Message.PICK_QUIZ_SUCCESS, quiz.toInsertDTO()), HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseObject(Message.PICK_QUIZ_SUCCESS, quiz.toDTO()), HttpStatus.OK);
     }
 }
