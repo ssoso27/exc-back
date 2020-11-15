@@ -114,4 +114,15 @@ public class AccountService {
         return new ResponseEntity<>(
                 new ResponseObject(Message.LIST_COURSE_SUCCESS, courses.stream().map(Course::toDTO)), HttpStatus.OK);
     }
+
+    public ResponseEntity<ResponseObject> myinfo(Integer accountId) {
+        Optional<Account> maybeAccount = accountRepository.findById(accountId);
+
+        if (maybeAccount.isEmpty()) {
+            return new ResponseEntity<>(new ResponseObject(Message.NON_EXIST_ACCOUNT, null), HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(
+                new ResponseObject(Message.GET_ACCOUNT_SUCCESS, maybeAccount.get().toDTO()), HttpStatus.OK);
+    }
 }

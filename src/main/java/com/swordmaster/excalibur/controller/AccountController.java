@@ -7,10 +7,12 @@ import com.swordmaster.excalibur.dto.SignInAccountDTO;
 import com.swordmaster.excalibur.dto.SignUpAccountDTO;
 import com.swordmaster.excalibur.enumclass.UserRole;
 import com.swordmaster.excalibur.service.AccountService;
+import com.swordmaster.excalibur.vo.SecurityUser;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -47,4 +49,13 @@ public class AccountController {
     public ResponseEntity<ResponseObject> teacherCourseList(@PathVariable Integer accountId) {
         return accountService.teacherCourseList(accountId);
     }
+
+    @ApiOperation(value = "내 정보 확인", notes = "로그인한 사용자의 정보를 반환합니다.")
+    @GetMapping("/myinfo")
+    public ResponseEntity<ResponseObject> myinfo() {
+        SecurityUser securityUser = (SecurityUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        return accountService.myinfo(securityUser.getId());
+    }
+
 }
