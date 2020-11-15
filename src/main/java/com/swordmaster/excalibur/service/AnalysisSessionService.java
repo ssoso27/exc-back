@@ -4,6 +4,7 @@ import com.swordmaster.excalibur.dto.ResponseObject;
 import com.swordmaster.excalibur.entity.AnalysisSession;
 import com.swordmaster.excalibur.entity.Course;
 import com.swordmaster.excalibur.enumclass.Message;
+import com.swordmaster.excalibur.enumclass.SessionStatus;
 import com.swordmaster.excalibur.repository.AnalysisSessionRepository;
 import com.swordmaster.excalibur.repository.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,7 @@ public class AnalysisSessionService {
         AnalysisSession analysisSession = AnalysisSession.builder()
                 .course(Course.builder().id(courseId).build())
                 .times(times)
+                .status(SessionStatus.ACTIVE)
                 .build();
 
         analysisSession = sessionRepository.save(analysisSession);
