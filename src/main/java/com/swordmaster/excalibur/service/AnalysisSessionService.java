@@ -54,4 +54,23 @@ public class AnalysisSessionService {
                 new ResponseObject(Message.CREATE_ANALYSIS_SESSION_SUCCESS, analysisSession.toDTO())
                 , HttpStatus.CREATED);
     }
+
+    public ResponseEntity<ResponseObject> getStatus(Integer courseId, Integer analysisSessionId) {
+        Optional<AnalysisSession> maybeSession = sessionRepository.findById(analysisSessionId);
+
+        if (maybeSession.isEmpty()) {
+            return new ResponseEntity<>(
+                    new ResponseObject(Message.NOT_EXIST_ANALYSIS_SESSION, null), HttpStatus.BAD_REQUEST);
+        }
+
+        AnalysisSession analysisSession = maybeSession.get();
+        if (!courseId.equals(analysisSession.getCourse().getId())) {
+            return new ResponseEntity<>(
+                    new ResponseObject(Message.NOT_MATCH_COURSE_SESSION, null), HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(
+                new ResponseObject(Message.GET_ANALYSIS_SESSION_STATUS_SUCCESS, analysisSession.getStatus().getName())
+                , HttpStatus.OK);
+    }
 }

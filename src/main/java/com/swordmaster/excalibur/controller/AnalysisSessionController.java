@@ -26,4 +26,9 @@ public class AnalysisSessionController {
         return analysisSessionService.create(courseId, securityUser.getId());
     }
 
+    @ApiOperation(value = "세션 상태 확인하기", notes = "해당 세션에 대한 활성화 여부를 확인합니다. (active/close)")
+    @GetMapping("/{analysisSessionId}/status")
+    public ResponseEntity<ResponseObject> getStatus(@PathVariable Integer courseId, @PathVariable Integer analysisSessionId) {
+        return analysisSessionService.getStatus(courseId, analysisSessionId);
+    }
 }
