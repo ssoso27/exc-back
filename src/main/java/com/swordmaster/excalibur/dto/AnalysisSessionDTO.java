@@ -1,7 +1,5 @@
 package com.swordmaster.excalibur.dto;
 
-import com.swordmaster.excalibur.entity.AnalysisSession;
-import com.swordmaster.excalibur.entity.Course;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,5 +17,8 @@ public class AnalysisSessionDTO {
 
     @ApiModelProperty(value = "차시", example = "1")
     private Integer times;
+
+    @ApiModelProperty(value = "세션 상태", example = "active")
+    private String status;
 
 }

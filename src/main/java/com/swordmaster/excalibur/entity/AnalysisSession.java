@@ -1,6 +1,7 @@
 package com.swordmaster.excalibur.entity;
 
 import com.swordmaster.excalibur.dto.AnalysisSessionDTO;
+import com.swordmaster.excalibur.enumclass.SessionStatus;
 import lombok.*;
 
 import javax.persistence.*;
@@ -25,11 +26,15 @@ public class AnalysisSession extends BaseEntity {
     @Column
     private Integer times;
 
+    @Column
+    private SessionStatus status;
+
     public AnalysisSessionDTO toDTO() {
         return AnalysisSessionDTO.builder()
                 .id(id)
                 .courseId(course.getId())
                 .times(times)
+                .status(status.getName())
                 .build();
     }
 }
