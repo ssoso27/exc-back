@@ -24,6 +24,7 @@ public enum Message {
     , LIST_COURSE_SUCCESS("강의 목록을 성공적으로 불러왔습니다.")
     , ALREADY_ALL_QUIZ_TRANSMIT("이미 출제된 모든 퀴즈를 보냈습니다.")
     , QUIZ_TRANSMIT_SUCCESS("최신 퀴즈를 성공적으로 불러왔습니다.")
+    , GET_ACCOUNT_SUCCESS("사용자 정보를 성공적으로 가져왔습니다.")
     ;
 
     private final String message;
