@@ -5,7 +5,6 @@ import com.swordmaster.excalibur.dto.ResponseObject;
 import com.swordmaster.excalibur.enumclass.Message;
 import com.swordmaster.excalibur.service.QuizService;
 import com.swordmaster.excalibur.vo.SecurityUser;
-import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

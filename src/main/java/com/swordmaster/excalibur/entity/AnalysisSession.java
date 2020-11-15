@@ -1,9 +1,7 @@
 package com.swordmaster.excalibur.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.swordmaster.excalibur.dto.AnalysisSessionDTO;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -11,6 +9,8 @@ import javax.persistence.*;
 @Table(name="analysis_session")
 @Builder
 @Getter
+@Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class AnalysisSession extends BaseEntity {
@@ -24,4 +24,12 @@ public class AnalysisSession extends BaseEntity {
 
     @Column
     private Integer times;
+
+    public AnalysisSessionDTO toDTO() {
+        return AnalysisSessionDTO.builder()
+                .id(id)
+                .courseId(course.getId())
+                .times(times)
+                .build();
+    }
 }
