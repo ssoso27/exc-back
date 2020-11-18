@@ -73,4 +73,26 @@ public class AnalysisSessionService {
                 new ResponseObject(Message.GET_ANALYSIS_SESSION_STATUS_SUCCESS, analysisSession.getStatus().getName())
                 , HttpStatus.OK);
     }
+
+    public ResponseEntity<ResponseObject> close(Integer courseId, Integer analysisSessionId) {
+        Optional<AnalysisSession> maybeSession = sessionRepository.findById(analysisSessionId);
+
+        if (maybeSession.isEmpty()) {
+            return new ResponseEntity<>(
+                    new ResponseObject(Message.NOT_EXIST_ANALYSIS_SESSION, null), HttpStatus.BAD_REQUEST);
+        }
+
+        AnalysisSession analysisSession = maybeSession.get();
+        if (!courseId.equals(analysisSession.getCourse().getId())) {
+            return new ResponseEntity<>(
+                    new ResponseObject(Message.NOT_MATCH_COURSE_SESSION, null), HttpStatus.BAD_REQUEST);
+        }
+
+        // TODO: 해당 강의 생성자인지 확인해야함
+        analysisSession.setStatus(SessionStatus.CLOSE);
+        sessionRepository.save(analysisSession);
+
+        return new ResponseEntity<>(
+                new ResponseObject(Message.SESSION_CLOSE_SUCCESS, analysisSession.toDTO()), HttpStatus.OK);
+    }
 }
