@@ -31,4 +31,12 @@ public class AnalysisSessionController {
     public ResponseEntity<ResponseObject> getStatus(@PathVariable Integer courseId, @PathVariable Integer analysisSessionId) {
         return analysisSessionService.getStatus(courseId, analysisSessionId);
     }
+
+    @ApiOperation(value = "세션 종료하기", notes = "강의자가 분석 세션을 종료합니다.")
+    @PostMapping("/{analysisSessionId}/close")
+    @PreAuthorize("isAuthenticated() and hasRole('ROLE_TEACHER')")
+    public ResponseEntity<ResponseObject> close(@PathVariable Integer courseId, @PathVariable Integer analysisSessionId) {
+        return analysisSessionService.close(courseId, analysisSessionId);
+    }
+
 }
