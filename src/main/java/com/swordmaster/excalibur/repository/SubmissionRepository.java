@@ -13,11 +13,6 @@ import java.util.Optional;
 public interface SubmissionRepository extends JpaRepository<Submission, Integer> {
     public List<Submission> findAllByAccountId(Integer accountId);
     public Optional<Submission> findByAccountIdAndQuizId(Integer accountId, Integer quizId);
+    public List<Submission> findAllByAccountIdAndQuizIdIn(Integer accountId, List<Integer> quizIds);
 
-//    @Query(value = "SELECT s.id, q.id as quizId, q.content, q.example1, q.example2, q.example3, q.answer, s.submit, s.isRight " +
-//            "FROM Submission s " +
-//            "JOIN Quiz q " +
-//            "ON s.quiz.id = q.id " +
-//            "WHERE s.account.id = :accountId AND q.isPick = 1")
-//    public List<SubmissionForRecordDTO> findAllRecordDTOByAccountId(Integer accountId);
 }
