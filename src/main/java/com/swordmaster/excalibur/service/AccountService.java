@@ -125,4 +125,11 @@ public class AccountService {
         return new ResponseEntity<>(
                 new ResponseObject(Message.GET_ACCOUNT_SUCCESS, maybeAccount.get().toDTO()), HttpStatus.OK);
     }
+
+    public ResponseEntity<ResponseObject> studentCourseList(Integer accountId) {
+        List<Course> courses = courseRepository.findAllByStudentId(accountId);
+
+        return new ResponseEntity<>(
+                new ResponseObject(Message.LIST_COURSE_SUCCESS, courses.stream().map(Course::toDTO)), HttpStatus.OK);
+    }
 }
