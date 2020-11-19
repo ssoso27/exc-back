@@ -11,6 +11,9 @@ import lombok.Setter;
 @Setter
 @Builder
 public class CourseDTO {
+    @ApiModelProperty(value = "강의 pk")
+    private Integer id;
+
     @ApiModelProperty(value = "강의 이름", example = "법과 사회")
     private String name;
 
