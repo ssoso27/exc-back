@@ -75,7 +75,8 @@ public class QuizService {
 
     public ResponseEntity<ResponseObject> getLatestQuiz(Integer accountId, Integer analysisSessionId) {
         List<Quiz> allQuizList = quizRepository.findAllByAnalysisSessionIdAndIsPick(analysisSessionId, 1);
-        List<Submission> submissionList = submissionRepository.findAllByAccountId(accountId);
+        List<Submission> submissionList = submissionRepository.findAllByAccountIdAndQuizIdIn(accountId
+                , allQuizList.stream().map(Quiz::getId).collect(Collectors.toList()));
 
         int allSize = allQuizList.size();
         int submitSize = submissionList.size();
