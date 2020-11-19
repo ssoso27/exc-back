@@ -31,8 +31,9 @@ public class Course extends BaseEntity {
 
     public CourseDTO toDTO() {
         return CourseDTO.builder()
+                .id(id)
                 .name(name)
-                .accountId(id)
+                .accountId(account.getId())
                 .code(code)
                 .build();
     }

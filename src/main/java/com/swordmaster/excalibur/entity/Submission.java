@@ -2,6 +2,7 @@ package com.swordmaster.excalibur.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -9,6 +10,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "submission")
 @Builder
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Submission extends BaseEntity {
