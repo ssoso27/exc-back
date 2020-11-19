@@ -33,6 +33,7 @@ public enum Message {
     , SESSION_CLOSE_SUCCESS("분석세션을 성공적으로 마쳤습니다.")
     , LIST_ANALYSIS_SESSION_SUCCESS("분석세션 목록을 성공적으로 가져왔습니다.")
     , REGISTER_COURSE_SUCCESS("수강 등록을 성공하였습니다.")
+    , LIST_ANAYSIS_SUCCESS("분석 기록을 성공적으로 불러왔습니다.")
     ;
 
     private final String message;

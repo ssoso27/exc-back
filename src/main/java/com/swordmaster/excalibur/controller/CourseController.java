@@ -33,4 +33,13 @@ public class CourseController {
         return courseService.listActiveCourse(securityUser.getId());
     }
 
+    @ApiOperation(value = "강의 내 모든 분석 결과 확인", notes = "이 강의가 갖고 있는 모든 세션/학생에 대한 분셕 결과를 가져옵니다.")
+    @PreAuthorize("isAuthenticated() and hasRole('ROLE_TEACHER')")
+    @GetMapping("/{courseId}/analysisses")
+    public ResponseEntity<ResponseObject> listAllAnalysis(@PathVariable Integer courseId) {
+        SecurityUser securityUser = (SecurityUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        return courseService.listAllAnalysis(securityUser.getId(), courseId);
+    }
+
 }

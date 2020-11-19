@@ -1,9 +1,11 @@
 package com.swordmaster.excalibur.dto;
 
+import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
 
+@Getter
 @Setter
 public class AnalysisRecordDTO {
     private CourseDTO course;
