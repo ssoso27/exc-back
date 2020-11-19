@@ -58,4 +58,11 @@ public class AccountController {
         return accountService.myinfo(securityUser.getId());
     }
 
+    @ApiOperation(value = "(수강생) 수강 강의 목록 확인", notes = "수강생이 자신이 수강 중인 강의 목록을 확인합니다.")
+    @PreAuthorize("isAuthenticated() and hasRole('ROLE_STUDENT')")
+    @GetMapping("/{accountId}/student/courses")
+    public ResponseEntity<ResponseObject> studentCourseList(@PathVariable Integer accountId) {
+        return accountService.studentCourseList(accountId);
+    }
+
 }
