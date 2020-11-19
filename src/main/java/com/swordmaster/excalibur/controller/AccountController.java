@@ -1,6 +1,7 @@
 package com.swordmaster.excalibur.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.swordmaster.excalibur.dto.AccountDTO;
 import com.swordmaster.excalibur.dto.ResponseObject;
 import com.swordmaster.excalibur.dto.SignInAccountDTO;
@@ -14,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/accounts/*")
@@ -63,6 +66,13 @@ public class AccountController {
     @GetMapping("/{accountId}/student/courses")
     public ResponseEntity<ResponseObject> studentCourseList(@PathVariable Integer accountId) {
         return accountService.studentCourseList(accountId);
+    }
+
+    @ApiOperation(value = "(수강생) 강의 수강 등록", notes = "수강생이 강의 코드를 통해 수강 등록합니다.")
+    @PreAuthorize("isAuthenticated() and hasRole('ROLE_STUDENT')")
+    @PostMapping("/{accountId}/student/courses")
+    public ResponseEntity<ResponseObject> courseRegister(@PathVariable Integer accountId, @RequestBody Map<String, String> data) {
+        return accountService.courseRegister(accountId, data.get("code"));
     }
 
 }
