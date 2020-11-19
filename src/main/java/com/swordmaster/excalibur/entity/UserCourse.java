@@ -1,6 +1,7 @@
 package com.swordmaster.excalibur.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -9,6 +10,7 @@ import javax.persistence.*;
 @Table(name = "user_course")
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class UserCourse extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,7 +21,7 @@ public class UserCourse extends BaseEntity {
     private Account account;
 
     @ManyToOne(targetEntity = UserCourseGroup.class)
-    @JoinColumn(name = "groupId", nullable = false)
+    @JoinColumn(name = "groupId")
     private UserCourseGroup group;
 
     @ManyToOne(targetEntity = Course.class)

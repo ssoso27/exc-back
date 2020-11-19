@@ -7,12 +7,14 @@ import com.swordmaster.excalibur.dto.SignInAccountDTO;
 import com.swordmaster.excalibur.dto.SignUpAccountDTO;
 import com.swordmaster.excalibur.entity.Account;
 import com.swordmaster.excalibur.entity.Course;
+import com.swordmaster.excalibur.entity.UserCourse;
 import com.swordmaster.excalibur.enumclass.SignUpType;
 import com.swordmaster.excalibur.enumclass.Message;
 import com.swordmaster.excalibur.enumclass.UserRole;
 import com.swordmaster.excalibur.helper.GoogleAPIHelper;
 import com.swordmaster.excalibur.repository.AccountRepository;
 import com.swordmaster.excalibur.repository.CourseRepository;
+import com.swordmaster.excalibur.repository.UserCourseRepository;
 import com.swordmaster.excalibur.util.JwtTokenProvider;
 import com.swordmaster.excalibur.vo.GoogleUserInfo;
 import com.swordmaster.excalibur.vo.Jwt;
@@ -41,6 +43,9 @@ public class AccountService {
 
     @Autowired
     CourseRepository courseRepository;
+
+    @Autowired
+    UserCourseRepository userCourseRepository;
 
     private Boolean validate(String inputPassword, String encodedPassword) {
         return passwordEncoder.matches(inputPassword, encodedPassword);
@@ -131,5 +136,23 @@ public class AccountService {
 
         return new ResponseEntity<>(
                 new ResponseObject(Message.LIST_COURSE_SUCCESS, courses.stream().map(Course::toDTO)), HttpStatus.OK);
+    }
+
+    public ResponseEntity<ResponseObject> courseRegister(Integer accountId, String code) {
+        Optional<Course> maybeCourse = courseRepository.findByCode(code);
+
+        if (maybeCourse.isEmpty()) {
+            return new ResponseEntity<>(new ResponseObject(Message.NOT_EXIST_COURSE, null), HttpStatus.BAD_REQUEST);
+        }
+
+        UserCourse userCourse = UserCourse.builder()
+                .course(maybeCourse.get())
+                .account(Account.builder().id(accountId).build())
+                .build();
+
+        userCourseRepository.save(userCourse);
+
+
+        return new ResponseEntity<>(new ResponseObject(Message.REGISTER_COURSE_SUCCESS, maybeCourse.get().toDTO()), HttpStatus.CREATED);
     }
 }
