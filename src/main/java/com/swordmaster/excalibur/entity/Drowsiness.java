@@ -1,9 +1,11 @@
 package com.swordmaster.excalibur.entity;
 
 import com.swordmaster.excalibur.dto.DrowsinessDTO;
+import com.swordmaster.excalibur.dto.DrowsinessForRecordDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 
@@ -12,6 +14,7 @@ import javax.persistence.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class Drowsiness extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,6 +42,15 @@ public class Drowsiness extends BaseEntity {
                 .id(id)
                 .accountId(account.getId())
                 .analysisSessionId(analysisSession.getId())
+                .status(status)
+                .startSecond(startSecond)
+                .endSecond(endSecond)
+                .build();
+    }
+
+    public DrowsinessForRecordDTO toForRecordDTO() {
+        return DrowsinessForRecordDTO.builder()
+                .id(id)
                 .status(status)
                 .startSecond(startSecond)
                 .endSecond(endSecond)

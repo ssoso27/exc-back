@@ -33,6 +33,7 @@ public class CourseController {
         return courseService.listActiveCourse(securityUser.getId());
     }
 
+    // TODO: 굉장히 오버헤드가 많이 발생하므로 꼭 사용해야만 하는지 재고 필요
     @ApiOperation(value = "강의 내 모든 분석 결과 확인", notes = "이 강의가 갖고 있는 모든 세션/학생에 대한 분셕 결과를 가져옵니다.")
     @PreAuthorize("isAuthenticated() and hasRole('ROLE_TEACHER')")
     @GetMapping("/{courseId}/analysisses")

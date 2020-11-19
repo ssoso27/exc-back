@@ -1,9 +1,15 @@
 package com.swordmaster.excalibur.dto;
 
 import io.swagger.annotations.ApiModelProperty;
+import lombok.*;
 
 import java.util.List;
 
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class AnalysisSessionForRecordDTO {
     @ApiModelProperty(value = "분석세션 pk", example = "1")
     private Integer id;

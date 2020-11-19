@@ -1,7 +1,13 @@
 package com.swordmaster.excalibur.dto;
 
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
+@Builder
 public class DrowsinessForRecordDTO {
     @ApiModelProperty(value = "졸음도 pk")
     private Integer id;
